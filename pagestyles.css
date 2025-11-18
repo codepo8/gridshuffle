@@ -1,0 +1,33 @@
+body {
+    font-family: sans-serif;
+    margin: 1em 3em;
+}
+#about { background-color: #f0f0f0; }
+#news { background-color: #d0d0d0; }
+#contact { background-color: #b0b0b0; }
+#casestudies { background-color: #909090; }
+#contentgrid > div {
+    padding: 1em;
+    border-radius: .3em;
+}
+button {
+    font-family: inherit;
+    border: none;
+    background: #369;
+    font-size: 1.3em;
+    color: white;
+    padding: 0.5em 1em;
+    cursor: pointer;
+    margin: 3em 0;
+}
+button:hover,button:focus {
+    background: #258;
+}
+nav {
+    background: #eee;
+    padding: 1em;
+    border-radius: .3em;
+}
+nav li {
+    padding: .2em 0;
+}

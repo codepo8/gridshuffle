@@ -4,25 +4,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Shuffle Grid</title>
+    <link rel="stylesheet" href="pagestyles.css">
     <style>
-        body {
-            font-family: sans-serif;
-        }
         #contentgrid {
             display: grid;
             gap: 20px;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
         }
-        #contentgrid > div {
-            padding: 1em;
-        }
-        #about { background-color: #f0f0f0; }
-        #news { background-color: #d0d0d0; }
-        #contact { background-color: #b0b0b0; }
-        #casestudies { background-color: #909090; }
     </style>
 </head>
 <body>
+    <h1>Shuffling grid items using CSS properties</h1>
     <div id="contentgrid">
         <div id="about">
             <h2>About</h2>
@@ -84,6 +76,8 @@
             array.push(first);
         };
     </script>
+    <nav></nav>
+    <script src="nav.js"></script>
 </body>
 </html>
 

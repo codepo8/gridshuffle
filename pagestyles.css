@@ -10,6 +10,9 @@ body {
     padding: 1em;
     border-radius: .3em;
 }
+h1,h2 {
+    font-weight: normal;
+}
 button {
     font-family: inherit;
     border: none;
@@ -30,4 +33,8 @@ nav {
 }
 nav li {
     padding: .2em 0;
+}
+nav a {
+    text-decoration: none;
+    color: #369;
 }

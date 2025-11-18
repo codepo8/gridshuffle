@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rotate Grid</title>
+    <style>
+        body {
+            font-family: sans-serif;
+        }
+        #contentgrid {
+            display: grid;
+            gap: 20px;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        }
+        #contentgrid > div {
+            padding: 1em;
+        }
+        #about { 
+            background-color: #f0f0f0; 
+        }
+        #news { 
+            background-color: #d0d0d0; 
+        }
+        #contact { 
+            background-color: #b0b0b0; 
+        }
+        #casestudies { 
+            background-color: #909090; 
+        }
+    </style>
+</head>
+<body>
+    <div id="contentgrid">
+        <div id="about">
+            <h2>About</h2>
+            <p>This is the order.html file.</p>
+        </div>
+        <div id="news">
+            <h2>News</h2>
+            <p>Latest news will be displayed here.</p>
+        </div>
+        <div id="contact">
+            <h2>Contact</h2>
+            <p>Contact information will be displayed here.</p>
+        </div>  
+        <div id="casestudies">
+            <h2>Case Studies</h2>
+            <p>Case studies will be displayed here.</p>
+        </div>
+    </div>
+    <button>Rotate</button>
+    <script>
+        let root = document.querySelector('#contentgrid');
+        let cssvar = `--item$x-order`;
+        // Get the amount of items
+        let elms = root.querySelectorAll(
+            root.firstElementChild.tagName
+        );
+        all = elms.length;
+        // Initialize the order array and set the order on the items
+        let orders = [];
+        for (let i = 1; i <= all; i++) {
+            orders.push(i);
+            elms[i - 1].style.setProperty(
+                'order', 'var(' + cssvar.replace('$x', i) + ')'
+            );
+            root.style.setProperty(cssvar.replace('$x', i), i);
+        }
+        // Rotate the order array and set the CSS variables accordingly
+        const rotategrid = () => {
+            let first = orders.shift();
+            orders.push(first);
+            orders.forEach((i, k) => {
+                root.style.setProperty(
+                    cssvar.replace('$x', k + 1), orders[k]
+                );
+            })
+        };
+        rotategrid();
+        document.querySelector('button').addEventListener('click',rotategrid);
+    </script>
+</body>
+</html>
+
+
+
+

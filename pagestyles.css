@@ -10,7 +10,7 @@ body {
     padding: 1em;
     border-radius: .3em;
 }
-h1,h2 {
+h1, h2 {
     font-weight: normal;
 }
 button {
@@ -26,6 +26,9 @@ button {
 button:hover,button:focus {
     background: #258;
 }
+p {
+    line-height: 1.5em;
+}
 nav {
     background: #eee;
     padding: 1em;
@@ -37,4 +40,12 @@ nav li {
 nav a {
     text-decoration: none;
     color: #369;
+}
+pre {
+    background: #333;
+    color: #eee;
+    font-size: 1.4em;
+    padding: 1em;
+    border-radius: .3em;
+    overflow-x: auto;
 }

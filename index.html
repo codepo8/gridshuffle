@@ -6,14 +6,20 @@
     <title>Shuffling a grid using CSS properties</title>
     <link rel="stylesheet" href="pagestyles.css">
     <style>
-        body {
-            font-family: sans-serif;
-        }
         #contentgrid {
+            --items: 4;
+            --item1-order: 1;
+            --item2-order: 1;
+            --item3-order: 1;
+            --item4-order: 1;
             display: grid;
             gap: 20px;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
         }
+        #about { order: var(--item1-order); }
+        #news { order: var(--item2-order); }
+        #contact { order: var(--item3-order); }
+        #casestudies { order: var(--item4-order); }    
     </style>
 </head>
 <body>
@@ -38,6 +44,7 @@
     </div>
     <button>Rotate</button>
 
+<p>The grid above shuffles around on every reload or when you active `shuffle` button. There are many ways to achieve this effect, but this example uses only CSS properties to set the order of the grid items. The HTML is not altered and there is no DOM manipulation other than accessing the CSS properties of the parent element. This should make this highly performant. The JavaScript code rotates the order of the items in the grid by changing the CSS variables that define their order. Below is the relevant code used to set up the grid and shuffle the items:</p>
 
 <pre>
 #contentgrid {
@@ -57,6 +64,26 @@
 #contact { order: var(--item3-order); }
 #casestudies { order: var(--item4-order); }        
     </pre>
+
+<p>We define the order of each element as `1`, which means that if we set any of them to `0`, it will be displayed first in the grid. For example, if we did the following, the `Case Studies` section would be displayed first:</p>
+
+<pre>
+#contentgrid {
+    --items: 4;
+    --item1-order: 1;
+    --item2-order: 1;
+    --item3-order: 1;
+<mark>    --item4-order: 0;</mark>
+/* … */
+}
+#about { order: var(--item1-order); }
+#news { order: var(--item2-order); }
+#contact { order: var(--item3-order); }
+#casestudies { order: var(--item4-order); }
+</pre>
+
+<p>This could be done on the server-side or with JavaScript as follows:</p>
+
 <pre>
 let root = document.querySelector('#contentgrid');
 let itemcount = getComputedStyle(root).
@@ -70,35 +97,56 @@ const shuffleorder = () => {
 };
 shuffleorder();
 </pre>    
-    <script>
-        let root = document.querySelector('#contentgrid');
-        let cssvar = `--item$x-order`;
-        // Get the amount of items
-        let elms = root.querySelectorAll(
-            root.firstElementChild.tagName
-        );
-        all = elms.length;
-        // Initialize the order array and set the order on the items
-        let orders = [];
-        for (let i = 1; i <= all; i++) {
-            orders.push(i);
-            elms[i - 1].style.setProperty(
-                'order', 'var(' + cssvar.replace('$x', i) + ')'
-            );
-            root.style.setProperty(cssvar.replace('$x', i), i);
-        }
-        // Rotate the order array and set the CSS variables accordingly
-        const rotategrid = () => {
-            orders.push(orders.shift());
-            orders.forEach((i, k) => {
-                root.style.setProperty(
-                    cssvar.replace('$x', k + 1), orders[k]
-                );
-            })
-        };
-        rotategrid();
-        document.querySelector('button').addEventListener('click',rotategrid);
-    </script>
+
+<p>We get the amount of items in the grid by reading the value of `--items` CSS property on the root element, and store the current first one in the `old` variable. We then pick a random number between `1` and the total number of items, and set the order of the old item to `1` and the new, random, item to `0`. We then re-define `old` as the new item.</p>
+
+<p>This is the most basic way of doing this, and it is not a real shuffle, as it only rotates the items in a fixed order. You can see the <a href="shuffle-grid.html">Shuffle Grid</a> example for a more advanced implementation as it randomised the array of all the items. You can also rotate the items by shifting the array of all orders as shown in the <a href="rotate-grid.html">Rotate Grid</a> example.</p>
+
+<p>The other examples also don't need any of the custom properties to be set, but create them instead. This means a tad more JS + DOM interaction but makes the process easier.</p>
+
+<pre>
+let root = document.querySelector('#contentgrid');
+let cssvar = `--item$x-order`;
+// Get the amount of items
+let elms = root.querySelectorAll(
+    root.firstElementChild.tagName
+);
+all = elms.length;
+// Initialize the order array and 
+// set the order on the items
+let orders = [];
+for (let i = 1; i <= all; i++) {
+    orders.push(i);
+    elms[i - 1].style.setProperty(
+        'order', 'var(' + cssvar.replace('$x', i) + ')'
+    );
+    root.style.setProperty(cssvar.replace('$x', i), i);
+}
+</pre>
+
+<p>But what if you wanted to not use any JavaScript at all to achieve this? Andy's solution he showed during the talk was to randomise the order server-side, which is easy to do in many languages. His solution using Jekyll was to generate the page every few minutes, <a href="https://alexwlchan.net/til/2024/shuffle-an-array-in-jekyll/">using the sample filter</a> which seems a bit wasteful, but is stable.</p> 
+
+<h2>Current and future CSS-only solutions</h2>
+
+<p>Currently there is no way to randomise or shuffle items using only CSS. However, <a href="https://css-tricks.com/almanac/functions/r/random/">there are solutions involving Sass</a> which requires pre-processing. Another nifty solution <a href="https://medium.com/hypersphere-codes/randomness-in-css-b55a0845c8dd">is this way</a> but it requires the use of `@property` which is not widely supported yet.</p> 
+
+<p>The CSS spec defines a <a href="https://www.w3.org/TR/css-values-5/#random">random() functionility </a>that could be used to achieve this effect without JavaScript. However, as of now, only <a href="https://webkit.org/blog/17285/rolling-the-dice-with-css-random/">Safari Technology Preview 170</a> supports this feature.</p>
+
+<p><a href="https://philipwalton.com/articles/the-dark-side-of-polyfilling-css/">Polyfilling CSS isn't easy</a>, so it might make sense for now to add a dash of JavaScript to your solution to achieve effects like this. This way seems to me a good compromise as it keeps the functionality in CSS instead of shuffling around whole DOM trees or re-writing the whole grid.</p>
+
+<script>
+let root = document.querySelector('#contentgrid');
+let itemcount = getComputedStyle(root).getPropertyValue('--items');
+let old = 1;
+const shuffleorder = () => {
+    let random = Math.floor(Math.random() * itemcount) + 1;
+    root.style.setProperty('--item' + old + '-order', 1);
+    root.style.setProperty('--item' + random + '-order', 0);
+    old = random;
+};
+shuffleorder();
+document.querySelector('button').addEventListener('click',shuffleorder);
+</script>
     <nav></nav>
     <script src="nav.js"></script>
 </body>

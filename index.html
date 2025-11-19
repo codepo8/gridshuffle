@@ -115,7 +115,7 @@ all = elms.length;
 // Initialize the order array and 
 // set the order on the items
 let orders = [];
-for (let i = 1; i <= all; i++) {
+for (let i = 1; i &lt;= all; i++) {
     orders.push(i);
     elms[i - 1].style.setProperty(
         'order', 'var(' + cssvar.replace('$x', i) + ')'

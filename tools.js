@@ -7,7 +7,13 @@ const CSSprop = {
 };
 
 
-const rotatearray = (array) => {
-    let first = array.shift();
-    array.push(first);
+const rotatearray = (array, direction = 1) => {
+    return direction > 0 ? 
+        array.push(array.shift()) : 
+        array.unshift(array.pop());
 };
+// rotatearray([1,2,3])  => [2,3,1]
+// rotatearray([1,2,3], 1)  => [2,3,1]
+// rotatearray([1,2,3], -1) => [3,1,2]
+
+export { CSSprop, rotatearray };
